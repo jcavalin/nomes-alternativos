@@ -45,7 +45,8 @@
 
 
 .index-container > .list ul li > .alternativas > div {
-    max-width: 100%;
+    width: 100%;
+    max-width: 400px;
     padding: 0.5em 0;
 }
 
