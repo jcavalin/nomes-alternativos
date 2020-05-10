@@ -5,7 +5,7 @@ import Index from './pages/Index';
 
 export default function Routes () {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Switch>
                 <Route path="/" exact component={Index} />
             </Switch>
