@@ -40,6 +40,20 @@
     font-weight: bold;
 }
 
+
+.index-container > .list ul li > .alternativas > div {
+    max-width: 100%;
+    padding: 0.5em 0;
+}
+
+.index-container > .list ul li > .alternativas > div > label {
+    background-color: #333333;
+    color: #FFF;
+    padding: 0.3em;
+    margin: 0.3em 0.3em 0 0;
+    float: left;
+}
+
 .index-container .scroll-top {
     position: fixed;
     bottom: 1em;

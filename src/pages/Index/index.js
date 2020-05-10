@@ -46,8 +46,10 @@ function Index() {
     const capitalize = name => 
         (name || '').charAt(0).toUpperCase() + name.toLowerCase().slice(1);
 
+    const formatLabel = name => (<label>{name}</label>);
+
     const formatName = name => 
-        (name || '-').split('|').map(capitalize).join(' ');
+        (name || '-').split('|').map(capitalize).map(formatLabel);
 
     const handleChange = event => {
         let { value } = event.currentTarget;
@@ -77,9 +79,7 @@ function Index() {
                     Fonte: IBGE/Censo 2010, dados tratados por 
                     Álvaro Justen/<a href="https://brasil.io">Brasil.IO</a>.
                 </small>
-            </div>
-
-            <section className="list">
+                
                 <div>
                     {loading ? showLoading() : ''}
                     
@@ -87,8 +87,9 @@ function Index() {
                         Nenhum nome encontrado.
                     </h3>
                 </div>
+            </div>
 
-
+            <section className="list">
                 <div style={names.length === 0 ? {display : 'none'} : {}}>
                     <h3>Nomes</h3>
 
