@@ -8,10 +8,13 @@ import api from '../../services/api';
 function Index() {
     const [next, setNext] = useState(null);
     const [names, setNames] = useState([]);
-    
+    const [loading, setLoading] = useState(false);
+
     let searchTimeout = null;
 
     const fetchData = search => {
+        setLoading(true);
+            
         let normalizeSearch = search => search.toUpperCase()
                                               .normalize("NFD")
                                               .replace(/[\u0300-\u036f]/g, ""); 
@@ -23,12 +26,11 @@ function Index() {
             
             setNext(next);
             setNames(results);
+            setLoading(false);
         });
     }
     
-    
     const fetchNext = () => {
-        console.log(next);
         if(!next) {
             return;
         }
@@ -45,7 +47,7 @@ function Index() {
         (name || '').charAt(0).toUpperCase() + name.toLowerCase().slice(1);
 
     const formatName = name => 
-        (name || '').split('|').map(capitalize).join(' ');
+        (name || '-').split('|').map(capitalize).join(' ');
 
     const handleChange = event => {
         let { value } = event.currentTarget;
@@ -56,7 +58,15 @@ function Index() {
 
         searchTimeout = setTimeout(() => fetchData(value), 1000);
     };
-    
+
+    const scrollToTop = () => window.scrollTo(0, 0);
+
+    const showLoading = () => (
+        <h3 className="loading">
+            Carregando...
+        </h3>
+    );
+
     useEffect(fetchData, []);
 
     return (
@@ -68,26 +78,48 @@ function Index() {
                     Álvaro Justen/<a href="https://brasil.io">Brasil.IO</a>.
                 </small>
             </div>
+
             <section className="list">
-                <ul>
-                    <InfiniteScroll
-                        dataLength={names.length} 
-                        next={fetchNext}
-                        hasMore={true}
-                        loader={<h4>Carregando...</h4>}
-                        >
-                        {names.map(name => (
-                            <li key={name.first_name}>
-                                <h3>{capitalize(name.first_name)}</h3>
-                                
-                                <strong>Alternativas</strong>
-                                <p>
-                                    {formatName(name.alternative_names)}
-                                </p>
-                            </li>
-                        ))}
-                    </InfiniteScroll>
-                </ul>
+                <div>
+                    {loading ? showLoading() : ''}
+                    
+                    <h3 class='vazio' style={loading || names.length > 0 ? {display : 'none'} : {}}>
+                        Nenhum nome encontrado.
+                    </h3>
+                </div>
+
+
+                <div style={names.length === 0 ? {display : 'none'} : {}}>
+                    <h3>Nomes</h3>
+
+                    <ul>
+                        <InfiniteScroll
+                            dataLength={names.length} 
+                            next={fetchNext}
+                            hasMore={true}
+                            loader={showLoading()}
+                            >
+                            {names.map(name => (
+                                <li key={name.first_name}>
+                                    <div className="nome">
+                                        {capitalize(name.first_name)}
+                                    </div>
+                                    
+                                    <div className="alternativas">
+                                        <strong>Alternativas</strong>
+                                        <div>
+                                            {formatName(name.alternative_names)}
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </InfiniteScroll>
+                    </ul>
+                </div>
+
+                <button type="button" className="scroll-top" onClick={scrollToTop}>
+                    Topo
+                </button>
             </section>
         </div>
     );
