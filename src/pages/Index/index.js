@@ -19,20 +19,25 @@ function Index() {
         search = search ? `?first_name=${normalizeSearch(search)}` : ''; 
     
         api.get(`nomes/data/${search}`).then(response => {
-            setNext(response.data.next);
-            setNames(response.data.results)
+            let {next, results} = response.data;
+            
+            setNext(next);
+            setNames(results);
         });
     }
     
     
     const fetchNext = () => {
+        console.log(next);
         if(!next) {
             return;
         }
 
         axios.get(next).then(response => {
-            setNext(response.data.next);
-            setNames([...names, ...response.data.results]);
+            let {next, results} = response.data;
+            
+            setNext(next);
+            setNames([...names, ...results]);
         })
     }
 
@@ -65,24 +70,23 @@ function Index() {
             </div>
             <section className="list">
                 <ul>
-                <InfiniteScroll
-                    dataLength={names.length} 
-                    next={fetchNext}
-                    hasMore={true}
-                    loader={<h4>Carregando...</h4>}
-                    height="100%"
-                    >
-                    {names.map(name => (
-                        <li key={name.first_name}>
-                            <h3>{capitalize(name.first_name)}</h3>
-                            
-                            <strong>Alternativas</strong>
-                            <p>
-                                {formatName(name.alternative_names)}
-                            </p>
-                        </li>
-                    ))}
-                </InfiniteScroll>
+                    <InfiniteScroll
+                        dataLength={names.length} 
+                        next={fetchNext}
+                        hasMore={true}
+                        loader={<h4>Carregando...</h4>}
+                        >
+                        {names.map(name => (
+                            <li key={name.first_name}>
+                                <h3>{capitalize(name.first_name)}</h3>
+                                
+                                <strong>Alternativas</strong>
+                                <p>
+                                    {formatName(name.alternative_names)}
+                                </p>
+                            </li>
+                        ))}
+                    </InfiniteScroll>
                 </ul>
             </section>
         </div>
