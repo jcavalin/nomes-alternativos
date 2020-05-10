@@ -2,6 +2,13 @@
 
 ### `docker-compose up -d --build`
 
+### API utilizada
+
+[Brasil.IO/Gênero dos Nomes](https://brasil.io/dataset/genero-nomes/nomes/)
+
+Fonte:
+IBGE/Censo 2010, dados tratados por Álvaro
+Justen/[Brasil.IO](https://brasil.io/).
 
 ---------------------------
 
